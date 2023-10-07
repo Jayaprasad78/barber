@@ -1,84 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>My Barber Shop</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Change Form</title>
 </head>
 <body>
-	<header>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Contact Us</a></li>
-        </ul>
-    </nav>
-</header>
+    <h2>Password Change</h2>
+    <form id="passwordChangeForm">
+        <div>
+            <label for="email">Email:</label>
+            <input
+                type="email"
+                id="email"
+                required
+            />
+        </div>
+        <div>
+            <label for="newPassword">New Password:</label>
+            <input
+                type="password"
+                id="newPassword"
+                required
+            />
+        </div>
+        <button type="submit">Change Password</button>
+    </form>
 
-	<main>
-		<section id="services">
-			<h2>Our Services</h2>
-			<p>We offer a wide range of services to help you look and feel your best:</p>
-			<ul>
-				<li>Haircuts</li>
-				<li>Beard Trims</li>
-				<li>Shaves</li>
-				<li>Facials</li>
-				<li>Coloring</li>
-			</ul>
-			<img src="images/barber-man.jpg" alt="Barber at work">
-		</section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("passwordChangeForm");
 
-		<section id="prices">
-			<h2>Our Prices</h2>
-			<p>Our prices are competitive and vary depending on the service:</p>
-			<table>
-				<tr>
-					<th>Service</th>
-					<th>Price</th>
-				</tr>
-				<tr>
-					<td>Haircut</td>
-					<td>$25</td>
-				</tr>
-				<tr>
-					<td>Beard Trim</td>
-					<td>$15</td>
-				</tr>
-				<tr>
-					<td>Shave</td>
-					<td>$20</td>
-				</tr>
-				<tr>
-					<td>Facial</td>
-					<td>$30</td>
-				</tr>
-				<tr>
-					<td>Coloring</td>
-					<td>$50+</td>
-				</tr>
-			</table>
-			<img src="images/pic-3.jpg" alt="Customers getting haircuts">
-		</section>
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
 
-		<section id="location">
-			<h2>Our Location</h2>
-			<p>We're located in the heart of downtown:</p>
-			<address>
-				123 Main St<br>
-				Suite 100<br>
-				Anytown, USA<br>
-				555-1234
-			</address>
-			<img src="images/pic-4.jpg" alt="Exterior of barber shop">
-		</section>
-	</main>
+                const email = document.getElementById("email").value;
+                const newPassword = document.getElementById("newPassword").value;
 
-	<footer>
-		<p>&copy; 2023 My Barber Shop</p>
-	</footer>
+                // Send a POST request to the backend using the Fetch API
+                fetch("http://localhost:3000/change-password", { // Replace with your backend URL
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, newPassword }),
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        throw new Error("Password change failed");
+                    }
+                })
+                .then((data) => {
+                    console.log(data.message);
+                    // You can perform further actions here upon success
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    // Handle errors here
+                });
+            });
+        });
+    </script>
 </body>
 </html>
